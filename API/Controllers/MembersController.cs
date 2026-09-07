@@ -6,10 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-
-    [Route("api/[controller]")] 
-    [ApiController]
-    public class MembersController(AppDbContext context) : ControllerBase
+    public class MembersController(AppDbContext context) : BaseApiController
     {
         /// <summary>
         /// Gets all members
@@ -30,6 +27,7 @@ namespace API.Controllers
         /// <param name="id">The user's identifier</param>
         /// <returns></returns>
         /// <remarks>EXAMPLE: GET localhost:5001/api/members</remarks>
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetMember(string id)
         {
