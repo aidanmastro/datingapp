@@ -7,7 +7,9 @@ namespace API.Extentions
     public static class AppUserExtentions
     {
 
-        // Converts AppUser to UserDto
+        /// <summary>
+        /// Converts AppUser to UserDto
+        /// </summary>
         public static UserDto ToDto(this AppUser user, ITokenService tokenService)
         {
             return new UserDto
