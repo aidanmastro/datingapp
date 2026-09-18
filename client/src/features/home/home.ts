@@ -9,7 +9,6 @@ import { User } from '../../types/user';
   templateUrl: './home.html',
 })
 export class Home {
-  @Input({required: true}) membersFromApp: User[] = [];
   protected registerMode = signal(false);
 
   showRegister(value: boolean) {
