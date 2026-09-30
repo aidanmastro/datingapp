@@ -22,3 +22,4 @@ export class ServerError {
     this.showDetails = !this.showDetails
   }
 }
+

@@ -1,12 +1,16 @@
 ﻿using API.Data;
 using API.Entities;
+using API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    public class MembersController(AppDbContext context) : BaseApiController
+    [Authorize]
+    public class MembersController(IMemberRepository memberRepository) : BaseApiController
     {
         /// <summary>
         /// Gets all members
@@ -14,24 +18,22 @@ namespace API.Controllers
         /// <returns></returns>
         /// <remarks>EXAMPLE: GET localhost:5001/api/members</remarks>
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<AppUser>>> GetMembers()
+        public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
         {
-            var members = await context.Users.ToListAsync();
-
-            return members;
+            return Ok(await memberRepository.GetMembersAsync());  
         }
 
         /// <summary>
-        /// Gets a single member based off of their id
+        /// Gets a particular Member 
         /// </summary>
         /// <param name="id">The user's identifier</param>
         /// <returns></returns>
         /// <remarks>EXAMPLE: GET localhost:5001/api/members</remarks>
         
         [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetMember(string id)
+        public async Task<ActionResult<Member>> GetMember(string id)
         {
-            var member = await context.Users.FindAsync(id);
+            var member = await memberRepository.GetMemberByIdAsync(id);
 
             if (member == null)
             {
@@ -39,6 +41,17 @@ namespace API.Controllers
             }
 
             return member;
+        }
+
+        /// <summary>
+        /// Gets all Photo(s) for particular member
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>EXAMPLE: GET localhost:5001/api/members</remarks>
+        [HttpGet("{id}/photos")]
+        public async Task<ActionResult<IReadOnlyList<Photo>>> GetMemberPhotos(string id)
+        {
+            return Ok(await memberRepository.GetPhotosForMemberAsync(id));
         }
     }
 }
